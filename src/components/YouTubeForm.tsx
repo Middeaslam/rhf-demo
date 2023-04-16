@@ -6,10 +6,30 @@ export interface FormValues {
   username: string;
   email: string;
   channel: string;
+  social: {
+    twitter: string;
+    facebook: string;
+  };
+  phoneNumbers: string[];
 }
 
 export const YouTubeForm = () => {
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({
+    defaultValues: async () => {
+      const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
+      const data = await response.json();
+      return {
+        username: 'Batman',
+        email: data.email,
+        channel: '',
+        social: {
+          twitter: '',
+          facebook: '',
+        },
+        phoneNumbers: ['', ''],
+      };
+    },
+  });
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
 
@@ -71,6 +91,26 @@ export const YouTubeForm = () => {
             })}
           />
           <p className='error'>{errors.channel?.message}</p>
+        </div>
+
+        <div className='form-control'>
+          <label htmlFor='Twitter'>Twitter</label>
+          <input type='text' id='twitter' {...register('social.twitter')} />
+        </div>
+
+        <div className='form-control'>
+          <label htmlFor='facebook'>Facebook</label>
+          <input type='text' id='facebook' {...register('social.facebook')} />
+        </div>
+
+        <div className='form-control'>
+          <label htmlFor='primary-phone'>Primary phone number</label>
+          <input type='text' id='primary-phone' {...register('phoneNumbers.0')} />
+        </div>
+
+        <div className='form-control'>
+          <label htmlFor='secondary-phone'>Secondary phone number</label>
+          <input type='text' id='secondary-phone' {...register('phoneNumbers.1')} />
         </div>
 
         <button>Submit</button>
