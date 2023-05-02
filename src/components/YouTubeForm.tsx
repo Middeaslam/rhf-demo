@@ -1,5 +1,6 @@
+import React, { useEffect } from 'react';
+
 import { DevTool } from '@hookform/devtools';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 
 export interface FormValues {
@@ -30,15 +31,29 @@ export const YouTubeForm = () => {
       };
     },
   });
-  const { register, control, handleSubmit, formState } = form;
+  const { register, control, handleSubmit, formState, watch } = form;
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
     console.log('Form Submitted', data);
   };
 
+  const watchUserName = watch(['username', 'email']);
+  const watchForm = watch();
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      console.log(value);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   return (
     <div>
+      <h2>Watched Value: {watchUserName}</h2>
+      <h2>Watched form value: {JSON.stringify(watchForm)}</h2>
+
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className='form-control'>
           <label htmlFor='username'>Username</label>
@@ -95,17 +110,47 @@ export const YouTubeForm = () => {
 
         <div className='form-control'>
           <label htmlFor='Twitter'>Twitter</label>
-          <input type='text' id='twitter' {...register('social.twitter')} />
+          <input
+            type='text'
+            id='twitter'
+            {...register('social.twitter', {
+              required: {
+                value: true,
+                message: 'Twitter is required',
+              },
+            })}
+          />
+          <p className='error'>{errors.social?.twitter?.message}</p>
         </div>
 
         <div className='form-control'>
           <label htmlFor='facebook'>Facebook</label>
-          <input type='text' id='facebook' {...register('social.facebook')} />
+          <input
+            type='text'
+            id='facebook'
+            {...register('social.facebook', {
+              required: {
+                value: true,
+                message: 'Facebook is required',
+              },
+            })}
+          />
+          <p className='error'>{errors.social?.facebook?.message}</p>
         </div>
 
         <div className='form-control'>
           <label htmlFor='primary-phone'>Primary phone number</label>
-          <input type='text' id='primary-phone' {...register('phoneNumbers.0')} />
+          <input
+            type='text'
+            id='primary-phone'
+            {...register('phoneNumbers.0', {
+              required: {
+                value: true,
+                message: 'Primary phone number is required',
+              },
+            })}
+          />
+          <p className='error'>{errors.phoneNumbers?.[0]?.message}</p>
         </div>
 
         <div className='form-control'>
