@@ -32,7 +32,9 @@ export const YouTubeForm = () => {
     },
   });
   const { register, control, handleSubmit, formState, watch, getValues, setValue } = form;
-  const { errors } = formState;
+  const { errors, touchedFields, dirtyFields, isDirty } = formState;
+
+  console.log('touchedFields:', touchedFields, 'dirtyFields:', dirtyFields, 'isDirty', isDirty);
 
   const onSubmit = (data: FormValues) => {
     console.log('Form Submitted', data);
