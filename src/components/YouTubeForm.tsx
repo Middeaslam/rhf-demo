@@ -31,7 +31,7 @@ export const YouTubeForm = () => {
       };
     },
   });
-  const { register, control, handleSubmit, formState, watch, getValues } = form;
+  const { register, control, handleSubmit, formState, watch, getValues, setValue } = form;
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
@@ -41,6 +41,14 @@ export const YouTubeForm = () => {
   const handleGetValues = () => {
     console.log('Get Values', getValues());
     console.log('Get Values', getValues(['username', 'social.twitter']));
+  };
+
+  const handleSetValue = () => {
+    setValue('username', '', {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   };
 
   // const watchUserName = watch(['username', 'email']);
@@ -166,6 +174,9 @@ export const YouTubeForm = () => {
         <button type='submit'>Submit</button>
         <button onClick={handleGetValues} type='button'>
           Get Values
+        </button>
+        <button onClick={handleSetValue} type='button'>
+          Set Value
         </button>
       </form>
       <DevTool control={control} />
