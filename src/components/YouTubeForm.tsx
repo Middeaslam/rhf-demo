@@ -133,6 +133,7 @@ export const YouTubeForm = () => {
                 value: true,
                 message: 'Twitter is required',
               },
+              disabled: watch('channel') === '',
             })}
           />
           <p className='error'>{errors.social?.twitter?.message}</p>
