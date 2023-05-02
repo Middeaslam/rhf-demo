@@ -31,28 +31,33 @@ export const YouTubeForm = () => {
       };
     },
   });
-  const { register, control, handleSubmit, formState, watch } = form;
+  const { register, control, handleSubmit, formState, watch, getValues } = form;
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
     console.log('Form Submitted', data);
   };
 
-  const watchUserName = watch(['username', 'email']);
-  const watchForm = watch();
+  const handleGetValues = () => {
+    console.log('Get Values', getValues());
+    console.log('Get Values', getValues(['username', 'social.twitter']));
+  };
 
-  useEffect(() => {
-    const subscription = watch((value) => {
-      console.log(value);
-    });
+  // const watchUserName = watch(['username', 'email']);
+  // const watchForm = watch();
 
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  // useEffect(() => {
+  //   const subscription = watch((value) => {
+  //     console.log(value);
+  //   });
+
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   return (
     <div>
-      <h2>Watched Value: {watchUserName}</h2>
-      <h2>Watched form value: {JSON.stringify(watchForm)}</h2>
+      {/* <h2>Watched Value: {watchUserName}</h2>
+      <h2>Watched form value: {JSON.stringify(watchForm)}</h2> */}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className='form-control'>
@@ -158,7 +163,10 @@ export const YouTubeForm = () => {
           <input type='text' id='secondary-phone' {...register('phoneNumbers.1')} />
         </div>
 
-        <button>Submit</button>
+        <button type='submit'>Submit</button>
+        <button onClick={handleGetValues} type='button'>
+          Get Values
+        </button>
       </form>
       <DevTool control={control} />
     </div>
